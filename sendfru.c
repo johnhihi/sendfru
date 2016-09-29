@@ -319,14 +319,18 @@ int Complete_structure( board_info *pcie_board_info)
     // Board Area Format Version : 1 byte
     if( pcie_board_info[i].b_area_format_version == 0 )
     {
+#ifdef DEBUG
       printf("Domain %d have no PCI-E device.\n", domains[i]);  
+#endif
       continue;
     }
     else 
     {
       byte_count += 1;
       checksum += pcie_board_info[i].b_area_format_version;
+#ifdef DEBUG
       printf("Domain %d have PCI-E device.\n", domains[i]);
+#endif
     }
     
     // Board Area Length : 1 byte
@@ -532,7 +536,6 @@ int PCIE_parser(board_info *pcie_board_info)
       q1 = strchr( line , '\"');
       q2 = strchr( q1+1 , '\"');
       *q2 = '\0';
-      //printf("%s\n", q1+1);
       
       
       //
@@ -541,7 +544,6 @@ int PCIE_parser(board_info *pcie_board_info)
       q1 = strchr( q2+1 , '\"');
       q2 = strchr( q1+1 , '\"');
       *q2 = '\0';
-      //printf("%s\n", q1+1);
       
       // count string length
       len = (unsigned)strlen(q1+1);     
@@ -553,7 +555,6 @@ int PCIE_parser(board_info *pcie_board_info)
       pcie_board_info[i].b_manufacturer_tl.bits.t_code = DEFAULT_TYPE_CODE;
       pcie_board_info[i].b_manufacturer_tl.bits.n_bytes = len & MAX_DATA_LENGTH;
       
-      //printf("*** Board Manufacturer type/length: %X \n", pcie_board_info[i].b_manufacturer_tl.byte);
       pcie_board_info[i].b_manufacturer = (BYTE*) malloc( len );
       if(pcie_board_info[i].b_manufacturer == NULL)
       {
@@ -583,7 +584,6 @@ int PCIE_parser(board_info *pcie_board_info)
       pcie_board_info[i].b_product_tl.bits.t_code = DEFAULT_TYPE_CODE;
       pcie_board_info[i].b_product_tl.bits.n_bytes = len & MAX_DATA_LENGTH;
       
-      //printf("*** Board Product type/length: %X \n", pcie_board_info[i].b_product_tl.byte);
       pcie_board_info[i].b_product = (BYTE*) malloc( len );
       if(pcie_board_info[i].b_product == NULL)
       {
